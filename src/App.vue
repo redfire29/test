@@ -10,18 +10,17 @@ const pageLimit = 6;
 let page = 1;
 const reposList = ref([]);
 const loading = ref(false);
-const loaderror = false;
+let loaderror = false;
 const getRepos = async () => {
   const [err, data] = await to(api.getRepos(page, pageLimit));
-  console.log(data, 'data');
   if (err) {
     loading.value = false;
     loaderror = true;
-    console.log(err.message);
   } else {
     if (get(data, 'length') > 0) {
-      loaderror = true;
       set(reposList, 'value', concat(reposList.value, data));
+    } else {
+      loaderror = true;
     }
     loading.value = false;
   }
@@ -38,7 +37,6 @@ const isInViewport = (el) => {
 }
 
 const scrollFunction = () => {
-  console.log(isInViewport(document.querySelector('#loadingbtn')), 'scrollFunction');
   if (isInViewport(document.querySelector('#loadingbtn'))) {
     if (!loaderror) {
       loading.value = true;
@@ -51,7 +49,6 @@ const scrollFunction = () => {
 window.addEventListener('scroll', scrollFunction);
 
 onMounted(() => {
-  console.log('onMounted');
   getRepos();
   scrollFunction();
 })
