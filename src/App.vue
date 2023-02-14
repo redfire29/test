@@ -19,7 +19,10 @@ const getRepos = async () => {
     loaderror = true;
     console.log(err.message);
   } else {
-    set(reposList, 'value', concat(reposList.value, data));
+    if (get(data, 'length') > 0) {
+      loaderror = true;
+      set(reposList, 'value', concat(reposList.value, data));
+    }
     loading.value = false;
   }
 }
